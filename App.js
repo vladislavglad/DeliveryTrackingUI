@@ -1,52 +1,44 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {Header,Colors} from 'react-native/Libraries/NewAppScreen';
+import 'react-native-gesture-handler';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+const Stack = createStackNavigator();
+
+// Custom Screens.
+import HomeScreen from "./screens/HomeScreen"
+import RequestTracking from "./screens/RequestTracking"
+import CheckStatus from "./screens/CheckStatus"
 
 export default function App() {
-  return (
-    <>
-      <Header />
-      <View style={styles.body}>
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Step One</Text>
-          <Text style={styles.sectionDescription}>
-            Write <Text style={styles.highlight}>"Hello World!"</Text> program 
-            to test that everything is set up correctly.
-          </Text>
-        </View>
-      </View>
-      <View style={styles.body}>
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Step Two</Text>
-          <Text style={styles.sectionDescription}>
-            Import your App!
-          </Text>
-        </View>
-      </View>
-    </>
-  );
-};
 
-const styles = StyleSheet.create({
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="homeScreen"
+          component={HomeScreen}
+          options={{
+            title: "Delivery Tracking App",
+            headerTitleAlign: "center"
+          }}
+        />
+        <Stack.Screen
+          name="requestScreen"
+          component={RequestTracking}
+          options={{
+            title: "Request Tracking",
+            headerTitleAlign: "center"
+          }}
+        />
+        <Stack.Screen
+          name="checkScreen"
+          component={CheckStatus}
+          options={{
+            title: "Check Status",
+            headerTitleAlign: "center"
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
