@@ -1,6 +1,7 @@
-//import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
+
+import PushNotification from "react-native-push-notification"
 
 // Custom componenets...
 import Title from "../components/Title"
@@ -27,12 +28,54 @@ export default function HomeScreen( {navigation} ) {
           }}
           title = "Check Status"
         />
+        
+      <Text style={styles.text}>Test Local Notifications:</Text>
       </View>
-      {/* <StatusBar style="auto" /> */}
+      <View style={styles.buttonContainer}>
+      <Button 
+          onPress={ () => {
+            PushNotification.localNotification({
+              title: "Delivery Tracking", 
+              message: "Your package has been delivered!"
+            });
+          }}
+          title = "Notify Me!"
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+      <Button 
+          onPress={ () => {
+            PushNotification.localNotificationSchedule({
+              message: "Your package has been delivered!",
+              date: new Date(Date.now() + 30 * 1000)
+            });
+          }}
+          title = "Schedule Notification!"
+        />
+      </View>
     </View>
   );
 
 }
+
+PushNotification.configure({
+  // (optional) Called when Token is generated (iOS and Android)
+  onRegister: function (token) {
+    console.log("TOKEN:", token);
+  },
+
+  // (required) Called when a remote is received or opened, or local notification is opened
+  onNotification: function (notification) {
+    console.log("NOTIFICATION:", notification);
+  },
+  permissions: {
+    alert: true,
+    badge: true,
+    sound: true,
+  },
+  popInitialNotification: true,
+  requestPermissions: true,
+});
 
 const styles = StyleSheet.create({
   container: {
