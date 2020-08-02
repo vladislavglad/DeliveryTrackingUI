@@ -64,14 +64,22 @@ export default function RequestTracking( {navigation} ) {
 
 async function sendRequest(username, email, trackingNum, token) {
 
-    //TODO: Check localy for empty data.
     const data = {
         username,
         email,
-        trackingNum,
-        token
+        trackingNum, // The only field that is really required!
+        token // Auto generated and passed to the server.
     };
     //console.log(data.username, data.email, data.trackingNum);
+
+    if (data.trackingNum === "") {
+        Alert.alert("Error:", "Please provide a tracking number!");
+        return;
+    } else if (data.trackingNum.length < 10) { // Length should be at least 10.
+        Alert.alert("Error:", "Your tracking number is invalid!");
+        return;
+    }
+
     try {
         const res = await fetch(API, {
             method: "POST",
