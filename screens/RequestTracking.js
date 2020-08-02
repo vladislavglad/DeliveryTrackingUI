@@ -1,8 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, Alert, ScrollView, TextInput } from 'react-native';
+import PushNotification from 'react-native-push-notification';
 //import { TextInput } from 'react-native-gesture-handler'; // What's the difference with React's own?
 
-const API = "http://192.168.1.13:3000/requestTracking";
+const API = "http://localhost:3000/requestTracking";
+let registrationToken = {}; // Holds value of user's device token.
 
 export default function RequestTracking( {navigation} ) {
     
@@ -40,14 +42,17 @@ export default function RequestTracking( {navigation} ) {
                     <Text style={styles.text}>Tracking Number</Text>            
                 </View>
                 <TextInput style={styles.textInput}
-                    placeholder="9400100000000000000000"
+                    placeholder="9300100000000000000000"
                     value = {getTrackingNum}
                     onChangeText = {num => setTrackingNum(num)}
                 />
             </View>
             <View style={styles.buttonContainer}>
                 <Button 
-                    onPress={() => {sendRequest(getUserName, getEmail, getTrackingNum)}}
+                    onPress={() => {
+                        // console.log(registrationToken);
+                        sendRequest(getUserName, getEmail, getTrackingNum, registrationToken);
+                    }}
                     title = "Submit"
                 />
             </View>
@@ -57,13 +62,14 @@ export default function RequestTracking( {navigation} ) {
 
 }
 
-async function sendRequest(username, email, trackingNum) {
+async function sendRequest(username, email, trackingNum, token) {
 
     //TODO: Check localy for empty data.
     const data = {
         username,
         email,
-        trackingNum
+        trackingNum,
+        token
     };
     //console.log(data.username, data.email, data.trackingNum);
     try {
@@ -89,6 +95,30 @@ async function sendRequest(username, email, trackingNum) {
         Alert.alert("Error:" , "Server is not responding!\nPlease try again leter.");
     }
 
+}
+
+PushNotification.configure({
+    // Called when Token is generated.
+    onRegister: function (token) {
+        console.log("TOKEN:", token);
+        setRegistrationToken(token.token);
+    },
+  
+    // Called when a notification is opened.
+    onNotification: function (notification) {
+        console.log("NOTIFICATION:", notification);
+    },
+    permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+    },
+    popInitialNotification: true,
+    requestPermissions: true,
+});
+
+function setRegistrationToken(token) {
+    registrationToken = token; 
 }
 
 const styles = StyleSheet.create({

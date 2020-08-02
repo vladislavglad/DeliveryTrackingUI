@@ -58,25 +58,6 @@ export default function HomeScreen( {navigation} ) {
 
 }
 
-PushNotification.configure({
-  // (optional) Called when Token is generated (iOS and Android)
-  onRegister: function (token) {
-    console.log("TOKEN:", token);
-  },
-
-  // (required) Called when a remote is received or opened, or local notification is opened
-  onNotification: function (notification) {
-    console.log("NOTIFICATION:", notification);
-  },
-  permissions: {
-    alert: true,
-    badge: true,
-    sound: true,
-  },
-  popInitialNotification: true,
-  requestPermissions: true,
-});
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
