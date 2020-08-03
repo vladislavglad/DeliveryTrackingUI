@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button, Alert} from 'react-native';
 
-const API = "http://localhost:3000/lookup/:trackingNum";
+const API = "http://localhost:3000/checkStatus/:trackingNum";
 
 export default function CheckStatus( {navigation} ) {
 
@@ -10,17 +10,24 @@ export default function CheckStatus( {navigation} ) {
   const processRequest = async (trackingNum) => {
     console.log("Provided tracking num: " + trackingNum);
 
-    const res = await fetch(API.replace(":trackingNum", trackingNum));
-    const data = await res.json();
-    //console.log(data);
+    // Some basic client-side validation (before bothering server).
+    if (trackingNum === "") {
+      Alert.alert("Error:", "Please provide a tracking number!");
+      return;
+    } else if (trackingNum.length < 10) { // Length should be at least 10.
+      Alert.alert("Error:", "Your tracking number is invalid!");
+      return;
+    }
 
-    if (data.trackingNum) {
-      if (data.isDelivered)
-        Alert.alert("Message:", "Your package has been delivered!");
-      else 
-        Alert.alert("Message:", "Your package has not been delivered!");
-    } else
-      Alert.alert("Message:", "Invalid Tracking Number!");
+    try {
+      const res = await fetch(API.replace(":trackingNum", trackingNum));
+      const data = await res.json();
+      Alert.alert("Message:", data.msg);
+
+    } catch(err) {
+      //console.log(err);
+      Alert.alert("Error:", "Server is not responding!");
+    }
 
   }
 
