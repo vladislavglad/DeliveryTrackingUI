@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, Button, Alert} from 'react-native';
 
-const API = "http://localhost:3000/checkStatus/:trackingNum";
+const API = "https://delivery-tracking-api.herokuapp.com/checkStatus/:trackingNum";
 
 export default function CheckStatus( {navigation} ) {
 

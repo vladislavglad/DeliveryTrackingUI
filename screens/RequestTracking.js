@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Button, Alert, ScrollView, TextInput } from 're
 import PushNotification from 'react-native-push-notification';
 //import { TextInput } from 'react-native-gesture-handler'; // What's the difference with React's own?
 
-const API = "http://localhost:3000/requestTracking";
+const API = "https://delivery-tracking-api.herokuapp.com/requestTracking";
 let registrationToken = {}; // Holds value of user's device token.
 
 export default function RequestTracking( {navigation} ) {
